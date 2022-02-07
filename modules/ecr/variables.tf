@@ -4,7 +4,7 @@ variable "name" {
   type = string
 }
 variable "holding_count" {
-  type    = number
+  type = number
   # デフォルト値
   default = 10
 }
