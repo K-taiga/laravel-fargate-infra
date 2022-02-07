@@ -1,5 +1,11 @@
 module "nginx" {
   source = "../../../../modules/ecr"
 
-  name = "example-prod-laravel-fargate-app-nginx"
+  name = "${local.name_prefix}-${local.service_name}-nginx"
+}
+
+module "PHP" {
+  source = "../../../../modules/ecr"
+
+  name = "${local.name_prefix}-${local.service_name}-php"
 }
