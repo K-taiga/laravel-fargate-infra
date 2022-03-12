@@ -39,6 +39,6 @@ data "aws_iam_policy" "ecr_power_user" {
 
 # roleにpolicyを紐付け
 resource "aws_iam_role_policy_attachment" "role_deployer_policy_ecr_power_user" {
-  role = aws_iam_role.deployer.name
+  role       = aws_iam_role.deployer.name
   policy_arn = data.aws_iam_policy.ecr_power_user.arn
 }
