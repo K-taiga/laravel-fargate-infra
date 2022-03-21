@@ -44,12 +44,10 @@ resource "aws_lb_listener" "https" {
 
   # リクエストを受け付けたときの挙動
   default_action {
-    type = "fixed-response"
+    type = "forward"
 
     fixed_response {
-      content_type = "text/plain"
-      message_body = "Fixed response content"
-      status_code  = "200"
+      target_group_arn = aws_lb_target_group.bodoge-cafe-reviews.arn
     }
   }
 }
@@ -70,5 +68,32 @@ resource "aws_lb_listener" "redirect_http_to_https" {
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
+  }
+}
+
+resource "aws_lb_target_group" "bodoge-cafe-reviews" {
+  name = "${local.name_prefix}-bodoge-cafe-reviews"
+
+  # タスクから切り離す前にALBが待機する時間　デフォルトでは300
+  deregistration_delay = 60
+  port                 = 80
+  protocol             = "HTTP"
+  target_type          = "ip"
+  vpc_id               = data.terraform_remote_state.network_main.outputs.vpc_this_id
+
+  health_check {
+    # ターゲットが正常と思われるまでに必要なヘルスチェック連続回数
+    healthy_threshold = 2
+    interval          = 30
+    # 正常とみなすステータスコード
+    matcher = 200
+    path    = "/"
+    # ALBからターゲットへのipと同じportを指定
+    port     = "traffic-port"
+    protocol = "HTTP"
+    # ヘルスチェックが失敗とみなす応答時間
+    timeout = 5
+    # ヘルスチェック失敗の連続回数
+    unhealthy_threshold = 2
   }
 }
