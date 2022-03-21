@@ -46,9 +46,7 @@ resource "aws_lb_listener" "https" {
   default_action {
     type = "forward"
 
-    fixed_response {
-      target_group_arn = aws_lb_target_group.bodoge-cafe-reviews.arn
-    }
+    target_group_arn = aws_lb_target_group.bodoge-cafe-reviews.arn
   }
 }
 
