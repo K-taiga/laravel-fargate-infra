@@ -7,4 +7,4 @@
 `ln -fs ../../shared_locals.tf shared_locals.tf`
 
 ## パラメータストア
-パラメータストアに関してはTerraform 管理外としAWS CLIで作成
+パラメータストアに関してはTerraform 管理外としAWSのコンソールで作成
