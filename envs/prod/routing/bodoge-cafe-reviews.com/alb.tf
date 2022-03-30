@@ -48,6 +48,10 @@ resource "aws_lb_listener" "https" {
 
     target_group_arn = aws_lb_target_group.bodoge-cafe-reviews.arn
   }
+
+  depends_on = [
+    aws_acm_certificate_validation.root
+  ]
 }
 
 # httpsからhttpへのリダイレクト
@@ -93,5 +97,9 @@ resource "aws_lb_target_group" "bodoge-cafe-reviews" {
     timeout = 5
     # ヘルスチェック失敗の連続回数
     unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name = "${local.name_prefix}-bodoge-cafe-reviews"
   }
 }
