@@ -11,3 +11,10 @@ resource "aws_acm_certificate" "root" {
     create_before_destroy = true
   }
 }
+
+resource "aws_acm_certificate_validation" "root" {
+  certificate_arn = aws_acm_certificate.root.arn
+  timeouts {
+    create = "60m"
+  }
+}
