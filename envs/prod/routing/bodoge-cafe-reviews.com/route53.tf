@@ -9,8 +9,7 @@ data "aws_route53_zone" "this" {
 resource "aws_route53_record" "certificate_validation" {
   # ACMで発行したドメインの所有権の証明書をDNSで検証するため、CNAMEレコードを↓で登録
   for_each = {
-    for dvo in aws_acm_certificate.root.domain_validation_options :
-    dvo.domain_name => {
+    for dvo in aws_acm_certificate.root.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       type   = dvo.resource_record_type
       record = dvo.resource_record_value

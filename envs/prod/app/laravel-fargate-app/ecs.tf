@@ -107,3 +107,57 @@ resource "aws_ecs_task_definition" "this" {
     Name = "${local.name_prefix}-${local.service_name}"
   }
 }
+
+resource "aws_ecs_service" "this" {
+  name = "${local.name_prefix}-${local.service_name}"
+
+  # 属するECSクラスターのARN
+  cluster = aws_ecs_cluster.this.arn
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    # 実行するFARGATEかFARGATE_SPOTのタイプの最小のタスク数
+    base = 0
+    # 実行するFARGATEかFARGATE_SPOTの比率
+    weight = 1
+  }
+
+  platform_version = "1.4.0"
+
+  # taskの定義
+  task_definition = aws_ecs_task_definition.this.arn
+
+  # 起動するタスクの数 = 今回は1
+  desired_count = var.desired_count
+  # タスクの古いものから新しいものへの更新の際に最低何個のタスクを維持するかの％
+  # つまり１個は必ず実行している
+  deployment_minimum_healthy_percent = 100
+  # タスクの実行の最大数の%
+  deployment_maximum_percent = 200
+
+  # load_balancerに晒すコンテナとport
+  load_balancer {
+    container_name   = "nginx"
+    container_port   = 80
+    target_group_arn = data.terraform_remote_state.routing_laravel-fargate-app_link.outputs.lb_target_group_bodoge-cafe-reviews_arn
+  }
+
+  # タスクの起動直後のヘルスチェックの猶予時間
+  health_check_grace_period_seconds = 60
+
+  network_configuration {
+    # タスクにパブリックipを紐付けるか
+    assign_public_ip = false
+    # ALBと紐付いているsecurity_groupをタスクにも紐付けることでALBとの通信を許可
+    security_groups = [
+      data.terraform_remote_state.network_main.outputs.security_group_vpc_id
+    ]
+    subnets = [for s in data.terraform_remote_state.network_main.outputs.subnet_private : s.id]
+  }
+
+
+  enable_execute_command = true
+  tags = {
+    Name = "${local.name_prefix}-${local.service_name}"
+  }
+}
