@@ -23,3 +23,18 @@ pull:
 # exportがターミナルの再起動で消えてconfigの参照ができないので操作前はこれを実行する
 setup-env:
 	export AWS_PROFILE=m1-mac-terraform
+
+ecs-php-exec:
+	aws ecs execute-command \
+	--cluster example-prod-laravel-fargate-app \
+	--container php \
+	--interactive \
+	--command "/bin/bash" \
+	--task タスクID
+
+ecs-nginx-exec:
+	aws ecs execute-command \
+  --cluster example-prod-laravel-fargate-app \
+	--container nginx \ --interactive \
+	--command "/bin/sh" \
+	--task タスクID
