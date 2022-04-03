@@ -59,13 +59,6 @@ resource "aws_iam_role_policy" "s3" {
           ],
           "Resource" : "arn:aws:s3:::k-taiga-tfstate/${local.system_name}/${local.env_name}/cicd/${local.service_name}_*.tfstate"
         },
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "s3:PutObject"
-          ],
-          "Resource" : "${data.aws_s3_bucket.env_file.arn}/*"
-        },
       ]
     }
   )
@@ -106,7 +99,8 @@ resource "aws_iam_role_policy" "ecs" {
         ],
         "Resource" : [
           data.aws_ecs_service.this.arn
-      ] }
+        ]
+      }
     ]
   })
 }
