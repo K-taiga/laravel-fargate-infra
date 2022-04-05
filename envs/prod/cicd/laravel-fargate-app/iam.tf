@@ -76,38 +76,70 @@ resource "aws_iam_role_policy" "ecs" {
   name = "ecs"
   role = aws_iam_role.deployer.id
 
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "RegisterTaskDefinition",
-        "Effect" : "Allow",
-        "Action" : [
-          "ecs:RegisterTaskDefinition"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Sid" : "PassRolesInTaskDefinition",
-        "Effect" : "Allow",
-        "Action" : [
-          "iam:PassRole"
-        ],
-        "Resource" : [
-          data.aws_iam_role.ecs_task.arn,
-          data.aws_iam_role.ecs_task_execution.arn,
-      ] },
-      {
-        "Sid" : "DeployService",
-        "Effect" : "Allow",
-        "Action" : [
-          "ecs:UpdateService",
-          "ecs:DescribeServices"
-        ],
-        "Resource" : [
-          data.aws_ecs_service.this.arn
-        ]
-      }
-    ]
-  })
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "RegisterTaskDefinition",
+          "Effect" : "Allow",
+          "Action" : [
+            "ecs:RegisterTaskDefinition",
+            "ecs:ListTaskDefinition",
+            "ecs:DescribeTaskDefinition"
+          ],
+          "Resource" : "*"
+        },
+        {
+          "Sid" : "PassRolesInTaskDefinition",
+          "Effect" : "Allow",
+          "Action" : [
+            "iam:PassRole"
+          ],
+          "Resource" : [
+            data.aws_iam_role.ecs_task.arn,
+            data.aws_iam_role.ecs_task_execution.arn,
+        ] },
+        {
+          "Sid" : "DeployService",
+          "Effect" : "Allow",
+          "Action" : [
+            "ecs:UpdateService",
+            "ecs:DescribeServices"
+          ],
+          "Resource" : [
+            data.aws_ecs_service.this.arn
+          ]
+        },
+        {
+          "Sid" : "RunAndWaitTask",
+          "Effect" : "Allow",
+          "Action" : [
+            "ecs:RunTask",
+            "ecs:DescribeTasks"
+          ],
+          "Condition" : {
+            "ArnEquals" : {
+              "ecs:cluster" : data.aws_ecs_cluster.this.arn
+            }
+          },
+          "Resource" : [
+            "arn:aws:ecs:${data.aws_region.current.id}:${data.aws_caller_identity.self.id}:task-definition/${local.name_prefix}-${local.service_name}:*",
+            "arn:aws:ecs:${data.aws_region.current.id}:${data.aws_caller_identity.self.id}:task/*"
+          ]
+        },
+        {
+          "Sid" : "GetLogEvents",
+          "Effect" : "Allow",
+          "Action" : [
+            "logs:GetLogEvents"
+          ],
+          "Resource" : [
+            data.aws_cloudwatch_log_group.nginx.arn,
+            data.aws_cloudwatch_log_group.php.arn
+          ]
+        }
+      ]
+    }
+  )
 }
