@@ -27,6 +27,10 @@ data "aws_lb_target_group" "this" {
   name = "${local.name_prefix}-bodoge-cafe-reviews"
 }
 
+data "aws_security_group" "db_laravel-fargate-app" {
+  name = "${local.name_prefix}-main-db_laravel-fargate-app"
+}
+
 data "aws_security_group" "vpc" {
   name = "${local.name_prefix}-main-vpc"
 }
