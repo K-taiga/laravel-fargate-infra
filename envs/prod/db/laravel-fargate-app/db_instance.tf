@@ -7,7 +7,7 @@ resource "aws_db_instance" "this" {
   identifier = "${local.system_name}-${local.env_name}-${local.service_name}"
 
   // Credentials Settings
-  username = local.service_name
+  username = local.env_name
   // passwordはダミーで後ほどAWS CLIを使って変更
   password = "MustChangeStrongPassword!"
 
@@ -28,7 +28,7 @@ resource "aws_db_instance" "this" {
   // private subnetなためfalse
   publicly_accessible = false
   vpc_security_group_ids = [
-    data.terraform_remote_state.network_main.outputs.security_group_db_foobar_id,
+    data.terraform_remote_state.network_main.outputs.security_group_db_laravel-fargate-app_id,
   ]
   availability_zone = "ap-northeast-1a"
   port              = 3306
@@ -37,7 +37,7 @@ resource "aws_db_instance" "this" {
   iam_database_authentication_enabled = false
 
   // Database options
-  name                 = local.service_name
+  name                 = local.env_name
   parameter_group_name = aws_db_parameter_group.this.name
   option_group_name    = aws_db_option_group.this.name
 
