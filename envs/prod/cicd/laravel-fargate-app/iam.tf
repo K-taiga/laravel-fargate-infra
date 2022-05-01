@@ -85,7 +85,7 @@ resource "aws_iam_role_policy" "ecs" {
           "Effect" : "Allow",
           "Action" : [
             "ecs:RegisterTaskDefinition",
-            "ecs:ListTaskDefinition",
+            "ecs:ListTaskDefinitions",
             "ecs:DescribeTaskDefinition"
           ],
           "Resource" : "*"
@@ -99,7 +99,8 @@ resource "aws_iam_role_policy" "ecs" {
           "Resource" : [
             data.aws_iam_role.ecs_task.arn,
             data.aws_iam_role.ecs_task_execution.arn,
-        ] },
+          ]
+        },
         {
           "Sid" : "DeployService",
           "Effect" : "Allow",
