@@ -4,7 +4,7 @@
 
 https://github.com/K-taiga/laravel-fargate-app
 
-## パラメータストア
+## ParameterStore
 パラメータストアに関してはTerraform 管理外としAWSのコンソールで作成
 
 ## Structure
