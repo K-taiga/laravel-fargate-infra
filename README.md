@@ -11,4 +11,4 @@
 
 ## 構成図
 
-![laravel-fargate-infra drawio](https://user-images.githubusercontent.com/46162925/166137748-ed4c50ea-dda4-4c7a-9299-c70f1ce0b55d.png)
+![laravel-fargate-infra](https://user-images.githubusercontent.com/46162925/166137814-deba5911-3843-4012-b625-d6817ca95bab.jpg)
