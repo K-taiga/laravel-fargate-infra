@@ -8,3 +8,7 @@
 
 ## パラメータストア
 パラメータストアに関してはTerraform 管理外としAWSのコンソールで作成
+
+## 構成図
+
+![laravel-fargate-infra drawio](https://user-images.githubusercontent.com/46162925/166137748-ed4c50ea-dda4-4c7a-9299-c70f1ce0b55d.png)
