@@ -7,6 +7,7 @@ https://github.com/K-taiga/laravel-fargate-app
 ## パラメータストア
 パラメータストアに関してはTerraform 管理外としAWSのコンソールで作成
 
-## 構成図
+## Structure
 
-![laravel-fargate-infra](https://user-images.githubusercontent.com/46162925/166137814-deba5911-3843-4012-b625-d6817ca95bab.jpg)
+![laravel-fargate-infra drawio](https://user-images.githubusercontent.com/46162925/166141599-a5934169-76d2-443c-8d12-6ffb389bf1fe.png)
+
